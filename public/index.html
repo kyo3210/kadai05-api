@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>介護支援チャットボット</title>
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="shortcut icon" href="./images/favicon.ico">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+<body style="background-color: #bce3fd61;">
+    
+    <header style="padding: 0px; text-align: center;">
+        <div class="container">
+        <p>ケアAIアシスタント</p>
+    </div>
+    </header>
+
+    <main style="max-width: 900px; margin: 20px auto; padding: 0 15px;">
+        
+    <section>
+    <h2 style="display: flex; align-items: center; gap: 10px; color: #15177fab;margin: 2px;"> 
+                <img src="./images/AI.gif" alt="AIアシスタント" style="height: 90px; width: 90px;">
+                何かお手伝いすることはありますか？
+    </h2>
+                <div id="chatbot-container" style="border: 1px solid #ccc; padding: 15px; background: #f9f9f9;">
+                
+                <div style="margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">
+                    <label for="client-select">対象利用者:</label>
+                    <select id="client-select" style="padding: 5px; flex-grow: 1;">
+                        <option value="" data-name="">利用者を選択してください</option>
+                        </select>
+                </div>
+                
+                <div id="chat-window" style="height: 300px; overflow-y: auto; margin-bottom: 10px; padding: 10px; background: white; border: 1px solid #eee;">
+            <div class="ai-message" style="font-size:15px; font-weight: bold; font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif; display: flex; align-items: center; gap: 5px;">
+               
+            </div>
+            </div>
+                
+                <form id="chat-form" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <input type="text" id="user-input" placeholder="AIへのプロンプトを入力" required style="flex-grow: 1; padding: 8px; min-width: 200px;">
+                    
+                    <button type="button" id="mic-button" title="音声入力" style="padding: 1px 1px;">
+                        <img src="./images/mic.png" style="font-size: 10px;";>
+                    </button>
+                    <button type="submit" style="padding: 0px 5px; background: #28a745; color: white; border: none;">
+                        <img src="./images/send.png" style="font-size: 10px;";>
+                    </button>
+                    
+                    <button type="button" id="clear-chat-button" style="padding: 8px 15px; background: #dc3545; color: white; border: none;">クリア</button>
+                    
+                    <button type="button" id="today-schedule-button" style="padding: 8px 15px; background: #ffc107; color: #333; border: none;">今日の予定を確認</button>
+                </form>
+            </div>
+        </section>
+
+        <hr style="margin: 30px 0;">
+
+<section style="display: flex; gap: 20px;">
+    <div style="flex: 1;">
+        <h2>✏️ 利用者基本情報 登録/編集</h2>
+        <form id="client-register-form">
+            <p>
+                <input type="text" id="reg-client-id" placeholder="利用者ID (任意のコード/必須)" required style="width: 60%; padding: 5px;">
+                <button type="button" id="search-client-by-id" style="width: 30%; padding: 5px;">検索</button>
+            </p>
+            
+            <input type="text" id="reg-client-name" placeholder="利用者氏名 (必須)" required style="width: 100%; padding: 5px; margin-bottom: 5px;"><br>
+            
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                <input type="text" id="reg-zipcode" placeholder="郵便番号 (ハイフン不要)" style="width: 60%; padding: 5px;" maxlength="7" pattern="[0-9]{7}">
+                <button type="button" id="search-zipcode" style="width: 40%; padding: 5px; background: #6c757d; color: white; border: none;">郵便番号検索</button>
+            </div>
+            
+            <input type="text" id="reg-address" placeholder="利用者住所" required style="width: 100%; padding: 5px; margin-bottom: 5px;"><br>
+            <input type="text" id="reg-contact-name" placeholder="連絡先氏名" required style="width: 100%; padding: 5px; margin-bottom: 5px;"><br>
+            <input type="tel" id="reg-contact-tel" placeholder="連絡先電話番号" required style="width: 100%; padding: 5px; margin-bottom: 5px;"><br>
+            <input type="text" id="reg-care-manager" placeholder="担当ケアマネジャー氏名" required style="width: 100%; padding: 5px; margin-bottom: 10px;"><br>
+            
+            <button type="submit" id="client-submit-button" style="width: 100%; padding: 10px; background: #17a2b8; color: white; border: none;">利用者基本情報を登録</button>
+        </form>
+    </div>
+
+            <div style="flex: 1;">
+                <h2>📚 ケア記録の追加</h2>
+                
+            <form id="record-add-form" style="border: 1px dashed #ccc; padding: 10px; margin-bottom: 15px;">
+                
+                <label for="record-client-select" style="display: block; margin-bottom: 5px;">対象利用者ID:</label>
+                <select id="record-client-select" required style="width: 100%; padding: 5px; margin-bottom: 5px;">
+                    <option value="" disabled selected>利用者を選択してください</option>
+                    </select>
+                
+                <label style="display: block; margin-bottom: 5px;">記録日時:</label>
+                <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                    <input type="date" id="record-date" required style="padding: 5px; flex-grow: 1;">
+                    <input type="time" id="record-time" required style="padding: 5px; flex-grow: 1;">
+                </div>
+                
+                <textarea id="record-content" placeholder="ケアの記録内容" required style="width: 100%; padding: 5px; margin-bottom: 10px; height: 80px;"></textarea><br>
+                <button type="submit" style="width: 100%; padding: 8px; background: #6c757d; color: white; border: none;">ケア記録を追加</button>
+            </form>            </div>
+        </section>
+
+        <hr style="margin: 30px 0;">
+
+        <section>
+            <h2>🔍 利用者検索・情報確認</h2>
+            <form id="client-search-form" style="display: flex; gap: 5px; margin-bottom: 15px;">
+                <input type="text" id="search-query" placeholder="利用者IDまたは氏名を入力..." required style="flex-grow: 1; padding: 8px;">
+                <button type="submit" style="padding: 8px 15px; background: #007bff; color: white; border: none;">検索</button>
+            </form>
+            <div id="search-results-area">
+                </div>
+        </section>
+
+    </main>
+    
+    <script type="module" src="./js/main.js"></script>
+
+    </body>
+</html>

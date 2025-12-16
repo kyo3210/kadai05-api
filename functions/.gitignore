@@ -1,0 +1,6 @@
+node_modules/
+*.local
+
+# dotenv environment variables file
+.env.kadai05-api-9c95b
+
