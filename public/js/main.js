@@ -19,12 +19,14 @@ import {
 
 // Firebaseの設定 
 const firebaseConfig = {
+    apiKey: "AIzaSyBcyRNWukU26ds3iPwn-sXybAm_-n9BQHk",
     authDomain: "kadai05-api-9c95b.firebaseapp.com",
     projectId: "kadai05-api-9c95b",
     storageBucket: "kadai05-api-9c95b.firebasestorage.app",
     messagingSenderId: "362459554836",
     appId: "1:362459554836:web:9d3ee0bd5bea0f23fb7301"
 };
+
 
 // V9初期化とFirestoreインスタンスの取得
 const app = initializeApp(firebaseConfig);
