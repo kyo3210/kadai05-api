@@ -19,7 +19,6 @@ import {
 
 // Firebaseの設定 
 const firebaseConfig = {
-    apiKey: "AIzaSyBcyRNWukU26ds3iPwn-sXybAm_-n9BQHk",
     authDomain: "kadai05-api-9c95b.firebaseapp.com",
     projectId: "kadai05-api-9c95b",
     storageBucket: "kadai05-api-9c95b.firebasestorage.app",
