@@ -91,7 +91,7 @@ function appendMessage(sender, message) {
         // ユーザーメッセージ画像を表示
         messageHtml = `
             <div class="${messageClass}" style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-                <img src="./images/q.png" alt="ユーザーアイコン" style="height: 20px; width: 20px; flex-shrink: 0;">
+                <img src="./images/Q.png" alt="ユーザーアイコン" style="height: 20px; width: 20px; flex-shrink: 0;">
                 <span style="white-space: pre-wrap; color: #333;">${message}</span>
             </div>
         `;
